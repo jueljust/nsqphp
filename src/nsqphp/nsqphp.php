@@ -217,11 +217,22 @@ class nsqphp
     {
         // say goodbye to each connection
         /** @var ConnectionInterface $connection */
-        foreach ($this->subConnectionPool as $connection) {
-            $connection->write($this->writer->close());
-            $connection->close();
-            if ($this->logger) {
-                $this->logger->info(sprintf('nsqphp closing [%s]', (string)$connection));
+        if ($this->subConnectionPool){
+            foreach ($this->subConnectionPool as $connection) {
+                $connection->write($this->writer->close());
+                $connection->close();
+                if ($this->logger) {
+                    $this->logger->info(sprintf('nsqphp closing [%s]', (string)$connection));
+                }
+            }
+        }
+        if ($this->pubConnectionPool){
+            foreach ($this->pubConnectionPool as $connection) {
+                $connection->write($this->writer->close());
+                $connection->close();
+                if ($this->logger) {
+                    $this->logger->info(sprintf('nsqphp closing [%s]', (string)$connection));
+                }
             }
         }
     }
